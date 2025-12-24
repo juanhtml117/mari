@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrusel de Tarjetas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #48bb78 100%);
+            padding: 20px;
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            animation: fadeIn 0.3s ease-in-out;
+            flex: 1;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .card-content {
+            width: 100%;
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+
+        .card p {
+            color: #4a5568;
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        .arrow {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #667eea;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .arrow:hover {
+            background: white;
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .arrow:active {
+            transform: scale(0.95);
+        }
+
+        .indicators {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+
+        .indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .indicator.active {
+            background: white;
+            width: 30px;
+            border-radius: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .carousel-container {
+                gap: 15px;
+            }
+
+            .card {
+                padding: 30px 20px;
+                min-height: 250px;
+            }
+
+            .card h2 {
+                font-size: 20px;
+            }
+
+            .card p {
+                font-size: 14px;
+            }
+
+            .arrow {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .carousel-container {
+                gap: 10px;
+            }
+
+            .card {
+                padding: 25px 15px;
+            }
+
+            .arrow {
+                width: 35px;
+                height: 35px;
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="carousel-container">
+        <button class="arrow" id="prevBtn">←</button>
+        
+        <div class="card" id="card">
+            <div class="card-content" id="cardContent">
+                <h2>Tarjeta 1</h2>
+                <p>Este es el mensaje de la primera tarjeta. Puedes personalizar este contenido como desees.</p>
+            </div>
+        </div>
+        
+        <button class="arrow" id="nextBtn">→</button>
+        
+        <div class="indicators" id="indicators"></div>
+    </div>
+
+    <script>
+        const cards = [
+            {
+                title: "Feliz Navidad mi vida",
+                message: "Hola cielo? Como estás? Queria desearte una feliz navidad en esta pequeña carta, espero que la estes pasando bien allá, que te den cosas chebres. Te extraño mucho."
+            },
+            {
+                title: "Gracias...",
+                message: "Doy gracias a Dios por tu vida y por darme el prilegio de que estés en la mía. Te doy gracias por estar para mi en las buenas y en las malas, por tu amor, tu paciencia y tu empatía. Gracias por sacarme una sonrisa incluso cuando siento que no doy para más. Gracias por esta linda relación y por todo lo que hemos vivido juntos, y de verdad rezo por que podamos vivir muchas cosas más"
+            },
+            {
+                title: "Te amo",
+                message: "Queria recordarte tambien lo mucho que te amo. Aunque en palabras no pueda poner todo el amor por ti, espero todos los dias poderte demostrartelo con mis acciones. De verdad es un sueño y una meta estar contigo, el amor de mi vida. Te elijo amar todos los dias, de pies a cabeza, con fortalezas y debilidades, elijo amarte aun sabien que estas medio loquita JAJAJA (yo estoy peor). Amo que ademas de novios somos amigos, complices, confidentes, amantes y una lista interminable de cosas."
+            },
+            {
+                title: "Te pienso cada dia de mi vida",
+                message: "Decirte que te extraño mucho, que todos los dias pienso en ti, que todos los dias siento esa necesidad de abrazar a mi novia y darle todo el amor que le tengo. Eres mi impulso de todos los dias y quien le da color a mi vida. No puedo sacarte de mi cabeza y no pienso dejar de hacerlo mi vida, porque pensar en ti es una alegria y una tristeza cuando no estoy contigo."
+            },
+            {
+                title: "El futuro",
+                message: "Princesa, te deseo ademas de una linda navidad un prospero 2026, donde puedas cumplir todas tus metas y sueños. Espero tener el privilegio y el gozo de poder celebrar tus victorias junto a ti, y tambien las derrotas. Y ultimo recordarte que siempre estare para ti, para reir contigo, para llorar contigo, para las que sea, pero contigo...juntos. Te amo mi cielo, eres el amor de mi vida y de verdad, te deseo siempre lo mejor. Byeeee"
+            }
+        ];
+
+        let currentIndex = 0;
+        const cardContent = document.getElementById('cardContent');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const indicatorsContainer = document.getElementById('indicators');
+
+        function createIndicators() {
+            cards.forEach((_, index) => {
+                const indicator = document.createElement('div');
+                indicator.className = 'indicator';
+                if (index === 0) indicator.classList.add('active');
+                indicatorsContainer.appendChild(indicator);
+            });
+        }
+
+        function updateCard() {
+            const card = cards[currentIndex];
+            cardContent.innerHTML = `
+                <h2>${card.title}</h2>
+                <p>${card.message}</p>
+            `;
+            
+            const indicators = document.querySelectorAll('.indicator');
+            indicators.forEach((ind, index) => {
+                ind.classList.toggle('active', index === currentIndex);
+            });
+        }
+
+        prevBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+            updateCard();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % cards.length;
+            updateCard();
+        });
+
+        createIndicators();
+    </script>
+</body>
+</html>
